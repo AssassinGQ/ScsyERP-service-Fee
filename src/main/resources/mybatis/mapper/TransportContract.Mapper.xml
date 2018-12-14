@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.AssassinG.ScsyERP.Fee.core.dao.impl.TransportContractDaoImpl">
+
+	<!-- 用户信息表 -->
+	<sql id="t_transport_contract"> t_transport_contract </sql>
+
+	<resultMap id="beanMap" type="TransportContractBean" extends="cn.AssassinG.ScsyERP.common.entity.BaseEntity.FormEntityMap">
+        <result column="contract_number" property="ContractNumber" />
+        <result column="ontruck_form" property="OnTruckForm" />
+        <result column="project" property="Project" />
+        <result column="out_storage_form" property="OutStorageForm" />
+        <result column="truck" property="Truck" />
+        <result column="supplier" property="Supplier" />
+        <result column="product_insurance" property="ProductInsurance" />
+        <result column="real_weight" property="RealWeight" />
+        <result column="fare_by_weight" property="FareByWeight" />
+        <result column="total_fare_by_weight" property="TotalFareByWeight" />
+        <result column="fare_by_truck" property="FareByTruck" />
+        <result column="prepay" property="PrePay" />
+        <result column="oil_card_type" property="OilCardType" typeHandler="cn.AssassinG.ScsyERP.Fee.core.dao.MyBatisHandler.OilCardTypeHandler"/>
+        <result column="oil_card_number" property="OilCardNumber" />
+        <result column="oil_card_money" property="OilCardMoney" />
+        <result column="pre_repair_fee" property="PreRepairFee" />
+	</resultMap>
+
+	<insert id="insert" parameterType="TransportContractBean" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="t_transport_contract"/> (corporation, create_time, update_time, delete_time, is_deleted,
+                          contract_number, ontruck_form, project, out_storage_form, truck, supplier, product_insurance, real_weight,
+                          fare_by_weight, total_fare_by_weight, fare_by_truck, prepay, oil_card_type, oil_card_number, oil_card_money, pre_repair_fee, if_completed)
+		values (#{Corporation}, now(), now(), NULL , FALSE , #{ContractNumber}, #{OnTruckForm}, #{Project}, #{OutStorageForm}, #{Truck}, #{Supplier},
+                  #{ProductInsurance}, #{RealWeight}, #{FareByWeight}, #{TotalFareByWeight}, #{FareByTruck}, #{PrePay},
+                  #{OilCardType,typeHandler=cn.AssassinG.ScsyERP.Fee.core.dao.MyBatisHandler.OilCardTypeHandler}, #{OilCardNumber}, #{OilCardMoney}, #{PreRepairFee}, #{IfCompleted})
+	</insert>
+
+	<insert id="batchInsert" parameterType="List" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="t_transport_contract"/> (corporation, create_time, update_time, delete_time, is_deleted,
+                          contract_number, ontruck_form, project, out_storage_form, truck, supplier, product_insurance, real_weight,
+                          fare_by_weight, total_fare_by_weight, fare_by_truck, prepay, oil_card_type, oil_card_number, oil_card_money, pre_repair_fee, if_completed)
+		values
+        <foreach collection="list" item="obj" separator=",">
+            (#{obj.Corporation}, now(), now(), NULL, FALSE, #{obj.ContractNumber}, #{obj.OnTruckForm}, #{obj.Project}, #{obj.OutStorageForm}, #{obj.Truck},
+            #{obj.Supplier}, #{obj.ProductInsurance}, #{obj.RealWeight}, #{obj.FareByWeight}, #{obj.TotalFareByWeight}, #{obj.FareByTruck}, #{obj.PrePay},
+            #{obj.OilCardType,typeHandler=cn.AssassinG.ScsyERP.Fee.core.dao.MyBatisHandler.OilCardTypeHandler}, #{obj.OilCardNumber}, #{obj.OilCardMoney}, #{obj.PreRepairFee}, #{obj.IfCompleted})
+        </foreach>
+	</insert>
+	
+	<update id="update" parameterType="TransportContractBean">
+		update <include refid="t_transport_contract"/>
+		<set>
+			update_time = now(),
+            ontruck_form =  #{OnTruckForm},
+            project = #{Project},
+            out_storage_form = #{OutStorageForm},
+            truck = #{Truck},
+            supplier = #{Supplier},
+            product_insurance = #{ProductInsurance},
+            real_weight = #{RealWeight},
+            fare_by_weight = #{FareByWeight},
+            total_fare_by_weight = #{TotalFareByWeight},
+            fare_by_truck = #{FareByTruck},
+            prepay = #{PrePay},
+            oil_card_type = #{OilCardType,typeHandler=cn.AssassinG.ScsyERP.Fee.core.dao.MyBatisHandler.OilCardTypeHandler},
+            oil_card_number = #{OilCardNumber},
+            oil_card_money = #{OilCardMoney},
+            pre_repair_fee = #{PreRepairFee},
+            if_completed = #{IfCompleted}
+		</set>
+		<where>
+			id = #{Id}
+		</where>
+	</update>
+
+    <update id="batchUpdate" parameterType="List">
+        update <include refid="t_transport_contract"/>
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    when id=#{item.Id} then now()
+                </foreach>
+            </trim>
+            <trim prefix="ontruck_form =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.OnTruckForm!=null">
+                        when id=#{item.Id} then #{item.OnTruckForm}
+                    </if>
+                </foreach>
+            </trim>
+			<trim prefix="project =case" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="item.Project!=null">
+						when id=#{item.Id} then #{item.Project}
+					</if>
+				</foreach>
+			</trim>
+            <trim prefix="out_storage_form =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.OutStorageForm!=null">
+                        when id=#{item.Id} then #{item.OutStorageForm}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="truck =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.Truck!=null">
+                        when id=#{item.Id} then #{item.Truck}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="supplier =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.Supplier!=null">
+                        when id=#{item.Id} then #{item.Supplier}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="product_insurance =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.ProductInsurance!=null">
+                        when id=#{item.Id} then #{item.ProductInsurance}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="real_weight =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.RealWeight!=null">
+                        when id=#{item.Id} then #{item.RealWeight}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="fare_by_weight =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.FareByWeight!=null">
+                        when id=#{item.Id} then #{item.FareByWeight}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_fare_by_weight =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.TotalFareByWeight!=null">
+                        when id=#{item.Id} then #{item.TotalFareByWeight}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="fare_by_truck =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.FareByTruck!=null">
+                        when id=#{item.Id} then #{item.FareByTruck}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="prepay =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.PrePay!=null">
+                        when id=#{item.Id} then #{item.PrePay}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="oil_card_type =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.OilCardType!=null">
+                        when id=#{item.Id} then #{item.OilCardType,typeHandler=cn.AssassinG.ScsyERP.Fee.core.dao.MyBatisHandler.OilCardTypeHandler}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="oil_card_number =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.OilCardNumber!=null">
+                        when id=#{item.Id} then #{item.OilCardNumber}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="oil_card_money =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.OilCardMoney!=null">
+                        when id=#{item.Id} then #{item.OilCardMoney}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pre_repair_fee =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.PreRepairFee!=null">
+                        when id=#{item.Id} then #{item.PreRepairFee}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="if_completed =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.IfCompleted!=null">
+                        when id=#{item.Id} then #{item.IfCompleted}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        <where>
+            <foreach collection="list" separator="or" item="item">
+                id=#{item.Id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="delete" parameterType="TransportContractBean">
+        update <include refid="t_transport_contract"/>
+        <set>
+            delete_time = now(),
+			update_time = now(),
+            is_deleted =  true
+        </set>
+        <where>
+            id = #{Id}
+        </where>
+    </update>
+
+	<update id="deleteById" parameterType="long">
+		update <include refid="t_transport_contract"/>
+		<set>
+			delete_time = now(),
+			update_time = now(),
+			is_deleted =  true
+		</set>
+		<where>
+			id = #{Id}
+		</where>
+	</update>
+	
+  	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select * from <include refid="t_transport_contract"/> where id = #{Id}
+  	</select>
+  	
+  	<select id="listAll" resultMap="beanMap">
+    	select * from <include refid="t_transport_contract"/> order by id asc
+  	</select>
+
+	<sql id="condition_sql">
+		<!-- Equal query -->
+		<if test="Id != null"> and id = #{Id}</if>
+		<if test="Corporation != null"> and corporation = #{Corporation}</if>
+		<if test="createTimeBegin != null"> and create_time &gt;= #{createTimeBegin}</if>
+		<if test="createTimeEnd != null"> and create_time &lt;= #{createTimeEnd}</if>
+		<if test="updateTimeBegin != null"> and update_time &gt;= #{updateTimeBegin}</if>
+		<if test="updateTimeEnd != null"> and update_time &lt;= #{updateTimeEnd}</if>
+		<if test="deleteTimeBegin != null"> and delete_time &gt;= #{deleteTimeBegin}</if>
+		<if test="deleteTimeEnd != null"> and delete_time &lt;= #{deleteTimeEnd}</if>
+		<if test="IfDeleted != null"> and is_deleted = #{IfDeleted}</if>
+		<if test="ContractNumber != null"> and contract_number = #{ContractNumber}</if>
+		<if test="OnTruckForm != null"> and on_truck_form = #{OnTruckForm}</if>
+		<if test="Project != null"> and project = #{Project}</if>
+		<if test="OutStorageForm != null"> and out_storage_form = #{OutStorageForm}</if>
+		<if test="Truck != null"> and truck = #{Truck}</if>
+        <if test="ProductInsuranceBegin != null"> and product_insurance &gt;= #{ProductInsuranceBegin}</if>
+        <if test="ProductInsuranceEnd != null"> and product_insurance &lt;= #{ProductInsuranceEnd}</if>
+        <if test="RealWeightBegin != null"> and real_weight &gt;= #{RealWeightBegin}</if>
+        <if test="RealWeightEnd != null"> and real_weight &lt;= #{RealWeightEnd}</if>
+        <if test="FareByWeightBegin != null"> and fare_by_weight &gt;= #{FareByWeightBegin}</if>
+        <if test="FareByWeightEnd != null"> and fare_by_weight &lt;= #{FareByWeightEnd}</if>
+        <if test="TotalFareByWeightBegin != null"> and total_fare_by_weight &gt;= #{TotalFareByWeightBegin}</if>
+        <if test="TotalFareByWeightEnd != null"> and total_fare_by_weight &lt;= #{TotalFareByWeightEnd}</if>
+        <if test="FareByTruckBegin != null"> and fare_by_truck &gt;= #{FareByTruckBegin}</if>
+        <if test="FareByTruckEnd != null"> and fare_by_truck &lt;= #{FareByTruckEnd}</if>
+        <if test="PrePayBegin != null"> and prepay &gt;= #{PrePayBegin}</if>
+        <if test="PrePayEnd != null"> and prepay &lt;= #{PrePayEnd}</if>
+        <if test="OilCardMoneyBegin != null"> and oil_card_money &gt;= #{OilCardMoneyBegin}</if>
+        <if test="OilCardMoneyEnd != null"> and oil_card_money &lt;= #{OilCardMoneyEnd}</if>
+        <if test="PreRepairFeeBegin != null"> and pre_repair_fee &gt;= #{PreRepairFeeBegin}</if>
+        <if test="PreRepairFeeEnd != null"> and pre_repair_fee &lt;= #{PreRepairFeeEnd}</if>
+        <if test="IfCompleted != null"> and if_completed = #{IfCompleted}</if>
+		<!-- Like query -->
+		<if test="Supplier != null and Supplier != ''"> and supplier like CONCAT(CONCAT('%', #{Supplier}), '%')</if>
+		<if test="OilCardNumber != null and OilCardNumber != ''"> and oil_card_number like CONCAT(CONCAT('%', #{OilCardNumber}), '%')</if>
+	</sql>
+
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select * from
+		<include refid="t_transport_contract"/>
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id asc]]>
+	</select>
+
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select * from
+		<include refid="t_transport_contract"/>
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id asc]]>
+	</select>
+
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from <include refid="t_transport_contract"/>
+		<where>
+			<include refid="condition_sql"/>
+		</where>
+	</select>
+	
+</mapper>

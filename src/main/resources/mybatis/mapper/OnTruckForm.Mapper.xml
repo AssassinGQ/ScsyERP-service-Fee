@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.AssassinG.ScsyERP.Fee.core.dao.impl.OnTruckFormDaoImpl">
+
+	<!-- 用户信息表 -->
+	<sql id="t_ontruck_form"> t_ontruck_form </sql>
+
+	<resultMap id="beanMap" type="OnTruckFormBean" extends="cn.AssassinG.ScsyERP.common.entity.BaseEntity.FormEntityMap">
+		<result column="form_number" property="FormNumber" />
+		<result column="project" property="Project" />
+		<result column="out_storage_form" property="OutStorageForm" />
+		<result column="tally_man" property="TallyMan" />
+		<result column="quality_test_man" property="QualityTestMan" />
+		<result column="sign_man" property="SignMan" />
+		<result column="sign_time" property="SignTime" />
+		<result column="account_status" property="AccountStatus" typeHandler="cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler" />
+		<result column="pictures" property="Pictures" typeHandler="cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler" />
+	</resultMap>
+
+	<insert id="insert" parameterType="OnTruckFormBean" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="t_ontruck_form"/> (corporation, create_time, update_time, delete_time, is_deleted, form_number, project, out_storage_form, tally_man, quality_test_man, sign_man, sign_time, account_status, pictures, if_completed)
+		values (#{Corporation}, now(), now(), NULL , FALSE , #{FormNumber}, #{Project}, #{OutStorageForm}, #{TallyMan}, #{QualityTestMan}, #{SignMan}, #{SignTime}, #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}, #{IfCompleted})
+	</insert>
+
+	<insert id="batchInsert" parameterType="List" keyProperty="id" useGeneratedKeys="true">
+		insert into <include refid="t_ontruck_form"/> (corporation, create_time, update_time, delete_time, is_deleted, form_number, project, out_storage_form, tally_man, quality_test_man, sign_man, sign_time, account_status, pictures, if_completed)
+		values
+        <foreach collection="list" item="obj" separator=",">
+            (#{obj.Corporation}, now(), now(), NULL, FALSE, #{obj.FormNumber}, #{obj.Project}, #{obj.OutStorageForm}, #{obj.TallyMan}, #{obj.QualityTestMan}, #{obj.SignMan}, #{obj.SignTime}, #{obj.AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{obj.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}, #{obj.IfCompleted})
+        </foreach>
+	</insert>
+	
+	<update id="update" parameterType="OnTruckFormBean">
+		update <include refid="t_ontruck_form"/>
+		<set>
+			update_time = now(),
+			project =  #{Project},
+			out_storage_form = #{OutStorageForm},
+			tally_man = #{TallyMan},
+			quality_test_man = #{QualityTestMan},
+			sign_man = #{SignMan},
+			sign_time = #{SignTime},
+			account_status = #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler},
+			pictures = #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler},
+			if_completed = #{IfCompleted}
+		</set>
+		<where>
+			id = #{Id}
+		</where>
+	</update>
+
+    <update id="batchUpdate" parameterType="List">
+        update <include refid="t_ontruck_form"/>
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    when id=#{item.Id} then now()
+                </foreach>
+            </trim>
+            <trim prefix="project =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.Project!=null">
+                        when id=#{item.Id} then #{item.Project}
+                    </if>
+                </foreach>
+            </trim>
+			<trim prefix="out_storage_form =case" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="item.OutStorageForm!=null">
+						when id=#{item.Id} then #{item.OutStorageForm}
+					</if>
+				</foreach>
+			</trim>
+            <trim prefix="tally_man =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.TallyMan!=null">
+                        when id=#{item.Id} then #{item.TallyMan}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="quality_test_man =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.QualityTestMan!=null">
+                        when id=#{item.Id} then #{item.QualityTestMan}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="sign_man =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.SignMan!=null">
+                        when id=#{item.Id} then #{item.SignMan}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="sign_time =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.SignTime!=null">
+                        when id=#{item.Id} then #{item.SignTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="account_status =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.AccountStatus!=null">
+                        when id=#{item.Id} then #{item.AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pictures =case" suffix="end,">
+                <foreach collection="list" item="item">
+                    <if test="item.Pictures!=null">
+                        when id=#{item.Id} then #{item.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}
+                    </if>
+                </foreach>
+            </trim>
+			<trim prefix="if_completed =case" suffix="end,">
+				<foreach collection="list" item="item">
+					<if test="item.IfCompleted!=null">
+						when id=#{item.Id} then #{item.IfCompleted}
+					</if>
+				</foreach>
+			</trim>
+        </trim>
+        <where>
+            <foreach collection="list" separator="or" item="item">
+                id=#{item.Id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="delete" parameterType="OnTruckFormBean">
+        update <include refid="t_ontruck_form"/>
+        <set>
+            delete_time = now(),
+			update_time = now(),
+            is_deleted =  true
+        </set>
+        <where>
+            id = #{Id}
+        </where>
+    </update>
+
+	<update id="deleteById" parameterType="long">
+		update <include refid="t_ontruck_form"/>
+		<set>
+			delete_time = now(),
+			update_time = now(),
+			is_deleted =  true
+		</set>
+		<where>
+			id = #{Id}
+		</where>
+	</update>
+	
+  	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select * from <include refid="t_ontruck_form"/> where id = #{Id}
+  	</select>
+  	
+  	<select id="listAll" resultMap="beanMap">
+    	select * from <include refid="t_ontruck_form"/> order by id asc
+  	</select>
+
+	<sql id="condition_sql">
+		<!-- Equal query -->
+		<if test="Id != null"> and id = #{Id}</if>
+		<if test="Corporation != null"> and corporation = #{Corporation}</if>
+		<if test="createTimeBegin != null"> and create_time &gt;= #{createTimeBegin}</if>
+		<if test="createTimeEnd != null"> and create_time &lt;= #{createTimeEnd}</if>
+		<if test="updateTimeBegin != null"> and update_time &gt;= #{updateTimeBegin}</if>
+		<if test="updateTimeEnd != null"> and update_time &lt;= #{updateTimeEnd}</if>
+		<if test="deleteTimeBegin != null"> and delete_time &gt;= #{deleteTimeBegin}</if>
+		<if test="deleteTimeEnd != null"> and delete_time &lt;= #{deleteTimeEnd}</if>
+		<if test="IfDeleted != null"> and is_deleted = #{IfDeleted}</if>
+		<if test="FormNumber != null"> and form_number = #{FormNumber}</if>
+		<if test="Project != null"> and project = #{Project}</if>
+		<if test="OutStorageForm != null"> and out_storage_form = #{OutStorageForm}</if>
+		<if test="TallyMan != null"> and tally_man = #{TallyMan}</if>
+		<if test="SignMan != null"> and sign_man = #{SignMan}</if>
+		<if test="SignTimeBegin != null"> and sign_time &gt;= #{SignTimeBegin}</if>
+		<if test="SignTimeEnd != null"> and sign_time &lt;= #{SignTimeEnd}</if>
+		<if test="AccountStatus != null"> and account_status = #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}</if>
+		<if test="IfCompleted != null"> and if_completed = #{IfCompleted}</if>
+		<!-- Like query -->
+		<if test="QualityTestMan != null and QualityTestMan != ''"> and quality_test_man like CONCAT(CONCAT('%', #{QualityTestMan}), '%')</if>
+	</sql>
+
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select * from
+		<include refid="t_ontruck_form"/>
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id asc]]>
+	</select>
+
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select * from
+		<include refid="t_ontruck_form"/>
+		<where>
+			<include refid="condition_sql" />
+		</where>
+		<![CDATA[ order by id asc]]>
+	</select>
+
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from <include refid="t_ontruck_form"/>
+		<where>
+			<include refid="condition_sql"/>
+		</where>
+	</select>
+	
+</mapper>

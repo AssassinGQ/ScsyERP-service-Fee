@@ -14,19 +14,19 @@
 		<result column="sign_man" property="SignMan" />
 		<result column="sign_time" property="SignTime" />
 		<result column="account_status" property="AccountStatus" typeHandler="cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler" />
-		<result column="pictures" property="Pictures" typeHandler="cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler" />
+		<result column="pictures" property="Pictures" typeHandler="cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.LongHashSetTypeHandler" />
 	</resultMap>
 
 	<insert id="insert" parameterType="OnTruckFormBean" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="t_ontruck_form"/> (corporation, create_time, update_time, delete_time, is_deleted, form_number, project, out_storage_form, tally_man, quality_test_man, sign_man, sign_time, account_status, pictures, if_completed)
-		values (#{Corporation}, now(), now(), NULL , FALSE , #{FormNumber}, #{Project}, #{OutStorageForm}, #{TallyMan}, #{QualityTestMan}, #{SignMan}, #{SignTime}, #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}, #{IfCompleted})
+		values (#{Corporation}, now(), now(), NULL , FALSE , #{FormNumber}, #{Project}, #{OutStorageForm}, #{TallyMan}, #{QualityTestMan}, #{SignMan}, #{SignTime}, #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.LongHashSetTypeHandler}, #{IfCompleted})
 	</insert>
 
 	<insert id="batchInsert" parameterType="List" keyProperty="id" useGeneratedKeys="true">
 		insert into <include refid="t_ontruck_form"/> (corporation, create_time, update_time, delete_time, is_deleted, form_number, project, out_storage_form, tally_man, quality_test_man, sign_man, sign_time, account_status, pictures, if_completed)
 		values
         <foreach collection="list" item="obj" separator=",">
-            (#{obj.Corporation}, now(), now(), NULL, FALSE, #{obj.FormNumber}, #{obj.Project}, #{obj.OutStorageForm}, #{obj.TallyMan}, #{obj.QualityTestMan}, #{obj.SignMan}, #{obj.SignTime}, #{obj.AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{obj.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}, #{obj.IfCompleted})
+            (#{obj.Corporation}, now(), now(), NULL, FALSE, #{obj.FormNumber}, #{obj.Project}, #{obj.OutStorageForm}, #{obj.TallyMan}, #{obj.QualityTestMan}, #{obj.SignMan}, #{obj.SignTime}, #{obj.AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler}, #{obj.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.LongHashSetTypeHandler}, #{obj.IfCompleted})
         </foreach>
 	</insert>
 	
@@ -41,7 +41,7 @@
 			sign_man = #{SignMan},
 			sign_time = #{SignTime},
 			account_status = #{AccountStatus,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.AccountStatusHandler},
-			pictures = #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler},
+			pictures = #{Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.LongHashSetTypeHandler},
 			if_completed = #{IfCompleted}
 		</set>
 		<where>
@@ -109,7 +109,7 @@
             <trim prefix="pictures =case" suffix="end,">
                 <foreach collection="list" item="item">
                     <if test="item.Pictures!=null">
-                        when id=#{item.Id} then #{item.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.HashSetTypeHandler}
+                        when id=#{item.Id} then #{item.Pictures,typeHandler=cn.AssassinG.ScsyERP.common.core.dao.MyBatisTypeHandler.LongHashSetTypeHandler}
                     </if>
                 </foreach>
             </trim>

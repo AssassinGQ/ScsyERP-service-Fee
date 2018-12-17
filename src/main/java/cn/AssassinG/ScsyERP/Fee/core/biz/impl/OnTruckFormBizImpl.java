@@ -130,6 +130,7 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
         if(onTruckForm.getSignTime() == null){
             throw new OnTruckFormBizException(OnTruckFormBizException.ONTRUCKFORMBIZ_CANNOTOPERATE, "随车清单还没有被签收，不能完成，entityId: %d", entityId);
         }
+        onTruckForm.setIfCompleted(true);
         this.update(onTruckForm);
     }
 }

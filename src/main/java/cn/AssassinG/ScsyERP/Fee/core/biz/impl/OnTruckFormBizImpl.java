@@ -42,7 +42,7 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
             Long qualityTestMan = paramMap.get("qualityTestMan") == null ? null : Long.valueOf(paramMap.get("qualityTestMan"));
             String signMan = paramMap.get("signMan");
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd  HH:mm:ss");
-            Date signTime = paramMap.get("signTime") == null ? null : new Date(paramMap.get("signTime"));
+            Date signTime = paramMap.get("signTime") == null ? null : new Date(Long.parseLong(paramMap.get("signTime")));
             AccountStatus accountStatus = AccountStatus.getEnum(Integer.valueOf(paramMap.get("accountStatus")));
             boolean flag = false;
             if(tallyMan != null) {
@@ -69,6 +69,7 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
                 this.update(inStorageForm);
             }
         }catch(NumberFormatException e){
+            e.printStackTrace();
             throw new OnTruckFormBizException(OnTruckFormBizException.ONTRUCKFORMBIZ_NOSUIT_RESULT, "参数格式错误："+e.getMessage());
         }
     }

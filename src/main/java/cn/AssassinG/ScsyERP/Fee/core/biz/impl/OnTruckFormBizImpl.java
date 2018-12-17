@@ -118,7 +118,6 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
 
     //todo statistic
     @Override
-    @Transactional
     public void complete(Long entityId) {
         if(entityId == null){
             throw new OnTruckFormBizException(OnTruckFormBizException.ONTRUCKFORMBIZ_PARAMS_ILLEGAL, "随车清单基本信息主键不能为空");

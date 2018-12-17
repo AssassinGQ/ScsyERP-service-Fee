@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -43,8 +41,8 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
             Long tallyMan = paramMap.get("tallyMan") == null ? null : Long.valueOf(paramMap.get("tallyMan"));
             Long qualityTestMan = paramMap.get("qualityTestMan") == null ? null : Long.valueOf(paramMap.get("qualityTestMan"));
             String signMan = paramMap.get("signMan");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd  HH:mm:ss");
-            Date signTime = paramMap.get("signTime") == null ? null : sdf.parse(paramMap.get("signTime"));
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd  HH:mm:ss");
+            Date signTime = paramMap.get("signTime") == null ? null : new Date(paramMap.get("signTime"));
             AccountStatus accountStatus = AccountStatus.getEnum(Integer.valueOf(paramMap.get("accountStatus")));
             boolean flag = false;
             if(tallyMan != null) {
@@ -70,7 +68,7 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
             if (flag) {
                 this.update(inStorageForm);
             }
-        }catch(NumberFormatException | ParseException e){
+        }catch(NumberFormatException e){
             throw new OnTruckFormBizException(OnTruckFormBizException.ONTRUCKFORMBIZ_NOSUIT_RESULT, "参数格式错误："+e.getMessage());
         }
     }

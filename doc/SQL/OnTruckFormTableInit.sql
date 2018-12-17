@@ -26,4 +26,4 @@ alter table t_ontruck_form comment '随车清单信息表';
 
 ## 权限的初始化数据
 insert into t_ontruck_form(corporation, form_number, project, out_storage_form, if_completed) values (-1, "asdasda", 1, 1, false);
-insert into t_ontruck_form(corporation, form_number, project, out_storage_form, if_completed) values (-1, "asdasd", 1, 1, false);
+insert into t_ontruck_form(corporation, form_number, project, out_storage_form, if_completed) values (-1, "asdasd", 1, 1, true);

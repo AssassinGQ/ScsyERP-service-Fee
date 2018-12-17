@@ -4,7 +4,6 @@ import cn.AssassinG.ScsyERP.Fee.core.biz.TransportContractBiz;
 import cn.AssassinG.ScsyERP.Fee.core.dao.TransportContractDao;
 import cn.AssassinG.ScsyERP.Fee.facade.entity.TransportContract;
 import cn.AssassinG.ScsyERP.Fee.facade.enums.OilCardType;
-import cn.AssassinG.ScsyERP.Fee.facade.exceptions.OnTruckFormBizException;
 import cn.AssassinG.ScsyERP.Fee.facade.exceptions.TransportContractBizException;
 import cn.AssassinG.ScsyERP.OutStorage.facade.entity.OutStorageForm;
 import cn.AssassinG.ScsyERP.OutStorage.facade.service.OutStorageFormServiceFacade;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.util.Map;
 
 @Component("TransportContractBiz")
@@ -125,6 +123,7 @@ public class TransportContractBizImpl extends FormBizImpl<TransportContract> imp
         }
         //按吨结算合计金额
         //按车结算金额
+        transportContract.setIfCompleted(true);
         this.update(transportContract);
     }
 }

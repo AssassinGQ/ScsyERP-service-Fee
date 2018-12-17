@@ -117,6 +117,7 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
     }
 
     //todo statistic
+    //数据库事务管理的坑
     @Override
     public void complete(Long entityId) {
         if(entityId == null){

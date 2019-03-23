@@ -9,6 +9,7 @@ import cn.AssassinG.ScsyERP.OutStorage.facade.entity.OutStorageForm;
 import cn.AssassinG.ScsyERP.OutStorage.facade.service.OutStorageFormServiceFacade;
 import cn.AssassinG.ScsyERP.common.core.biz.impl.FormBizImpl;
 import cn.AssassinG.ScsyERP.common.core.dao.BaseDao;
+import cn.AssassinG.ScsyERP.common.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,32 @@ public class TransportContractBizImpl extends FormBizImpl<TransportContract> imp
     private TransportContractDao transportContractDao;
     protected BaseDao<TransportContract> getDao() {
         return this.transportContractDao;
+    }
+
+    @Override
+    public Long create(TransportContract transportContract) {
+        if(transportContract.getContractNumber() == null){
+            transportContract.setContractNumber(String.valueOf(System.currentTimeMillis()));
+        }
+        transportContract.setIfCompleted(false);
+        ValidUtils.ValidationWithExp(transportContract);
+//        Map<String, Object> queryMap = new HashMap<String, Object>();
+//        queryMap.put("IfDeleted", false);
+//        queryMap.put("Warehouse", outStorageForm.getWarehouse());
+//        queryMap.put("IfCompleted", false);
+//        List<InStorageForm> inStorageForms = inStorageFormDao.listBy(queryMap);
+//        if(inStorageForms.size() > 1){
+//            throw new InStorageFormBizException(InStorageFormBizException.INSTORAGEFORMBIZ_UNKNOWN_ERROR, "仓库（主键：%d）存在多个活跃的入库单", outStorageForm.getWarehouse());
+//        }else if(inStorageForms.size() == 1){
+//            throw new InStorageFormBizException(InStorageFormBizException.INSTORAGEFORMBIZ_UNKNOWN_ERROR, "当前仓库已经存在一个活跃的入库单，仓库主键：%d", inStorageForms.get(0).getWarehouse());
+//        }else{
+        Long id = getDao().insert(transportContract);
+        if(!transportContract.getContractNumber().startsWith("tc")){
+            transportContract.setContractNumber("tc" + id);
+            getDao().update(transportContract);
+        }
+        return id;
+//        }
     }
 
     /**

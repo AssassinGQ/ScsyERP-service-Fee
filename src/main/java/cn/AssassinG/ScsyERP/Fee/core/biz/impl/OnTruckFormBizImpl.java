@@ -9,6 +9,7 @@ import cn.AssassinG.ScsyERP.File.facade.service.MyFileServiceFacade;
 import cn.AssassinG.ScsyERP.common.core.biz.impl.FormBizImpl;
 import cn.AssassinG.ScsyERP.common.core.dao.BaseDao;
 import cn.AssassinG.ScsyERP.common.enums.AccountStatus;
+import cn.AssassinG.ScsyERP.common.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,35 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
     private OnTruckFormDao onTruckFormDao;
     protected BaseDao<OnTruckForm> getDao() {
         return this.onTruckFormDao;
+    }
+
+    @Override
+    public Long create(OnTruckForm onTruckForm) {
+        if(onTruckForm.getFormNumber() == null){
+            onTruckForm.setFormNumber(String.valueOf(System.currentTimeMillis()));
+        }
+        if(onTruckForm.getAccountStatus() == null) {
+            onTruckForm.setAccountStatus(cn.AssassinG.ScsyERP.common.enums.AccountStatus.WRZ);
+        }
+        onTruckForm.setIfCompleted(false);
+        ValidUtils.ValidationWithExp(onTruckForm);
+//        Map<String, Object> queryMap = new HashMap<String, Object>();
+//        queryMap.put("IfDeleted", false);
+//        queryMap.put("Warehouse", outStorageForm.getWarehouse());
+//        queryMap.put("IfCompleted", false);
+//        List<InStorageForm> inStorageForms = inStorageFormDao.listBy(queryMap);
+//        if(inStorageForms.size() > 1){
+//            throw new InStorageFormBizException(InStorageFormBizException.INSTORAGEFORMBIZ_UNKNOWN_ERROR, "仓库（主键：%d）存在多个活跃的入库单", outStorageForm.getWarehouse());
+//        }else if(inStorageForms.size() == 1){
+//            throw new InStorageFormBizException(InStorageFormBizException.INSTORAGEFORMBIZ_UNKNOWN_ERROR, "当前仓库已经存在一个活跃的入库单，仓库主键：%d", inStorageForms.get(0).getWarehouse());
+//        }else{
+        Long id = getDao().insert(onTruckForm);
+        if(!onTruckForm.getFormNumber().startsWith("otf")){
+            onTruckForm.setFormNumber("otf" + id);
+            getDao().update(onTruckForm);
+        }
+        return id;
+//        }
     }
 
     /**

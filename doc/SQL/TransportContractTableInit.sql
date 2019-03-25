@@ -32,5 +32,5 @@ create table t_transport_contract (
 alter table t_transport_contract comment '运输合同信息表';
 
 ## 权限的初始化数据
-insert into t_transport_contract(corporation, contract_number, if_completed) values (1, "aaaaaaa", false);
-insert into t_transport_contract(corporation, contract_number, if_completed) values (1, "bbbbbbb", false);
+# insert into t_transport_contract(corporation, contract_number, if_completed) values (1, "aaaaaaa", false);
+# insert into t_transport_contract(corporation, contract_number, if_completed) values (1, "bbbbbbb", false);

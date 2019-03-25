@@ -73,7 +73,12 @@ public class OnTruckFormBizImpl extends FormBizImpl<OnTruckForm> implements OnTr
             String signMan = paramMap.get("signMan");
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd  HH:mm:ss");
             Date signTime = paramMap.get("signTime") == null ? null : new Date(Long.parseLong(paramMap.get("signTime")));
-            AccountStatus accountStatus = AccountStatus.getEnum(Integer.parseInt(paramMap.get("accountStatus")));
+            AccountStatus accountStatus;
+            try{
+                accountStatus = AccountStatus.getEnum(Integer.parseInt(paramMap.get("accountStatus")));
+            }catch(Exception e){
+                accountStatus = null;
+            }
             boolean flag = false;
             if(tallyMan != null) {
                 inStorageForm.setTallyMan(tallyMan);

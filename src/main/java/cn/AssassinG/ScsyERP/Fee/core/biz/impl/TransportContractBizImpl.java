@@ -68,7 +68,7 @@ public class TransportContractBizImpl extends FormBizImpl<TransportContract> imp
             Double productInsurance = paramMap.get("productInsurance") == null ? null : Double.valueOf(paramMap.get("productInsurance"));
             Double realWeight = paramMap.get("realWeight") == null ? null : Double.valueOf(paramMap.get("realWeight"));
             Double prePay = paramMap.get("prePay") == null ? null : Double.valueOf(paramMap.get("prePay"));
-            OilCardType oilCardType = OilCardType.getEnum(paramMap.get("oilCardType"));
+            OilCardType oilCardType = OilCardType.getEnum(Integer.parseInt(paramMap.get("oilCardType")));
             String oilCardNumber = paramMap.get("oilCardNumber");
             Double oilCardMoney = paramMap.get("oilCardMoney") == null ? null : Double.valueOf(paramMap.get("oilCardMoney"));
             Double preRepairFee = paramMap.get("preRepairFee") == null ? null : Double.valueOf(paramMap.get("preRepairFee"));

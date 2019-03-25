@@ -149,6 +149,8 @@ public class TransportContractBizImpl extends FormBizImpl<TransportContract> imp
                 transportContract.setRealWeight(outStorageForm.getTotalWeight());
         }
         //按吨结算合计金额
+        transportContract.setFareByTruck(1.0);
+        transportContract.setFareByWeight(1.5*transportContract.getRealWeight());
         //按车结算金额
         transportContract.setIfCompleted(true);
         this.update(transportContract);
